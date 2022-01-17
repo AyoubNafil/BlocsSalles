@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const url = "mongodb://omar:omar@cluster0-shard-00-00.sf0zs.mongodb.net:27017,cluster0-shard-00-01.sf0zs.mongodb.net:27017,cluster0-shard-00-02.sf0zs.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-umacmu-shard-0&authSource=admin&retryWrites=true&w=majority"
 
+
 const app = express()
 
 mongoose.connect(url, {useNewUrlParser:true})
@@ -13,8 +14,18 @@ con.on('open', () => {
 
 app.use(express.json())
 
+////////////////////////////////////////////////////////////////////
+const http = require('http')
+const port = process.env.PORT || 8080
+const httpServer = http.createServer(app)
+httpServer.listen(port)
+
 const WebSocket = require('ws')
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({
+  'server': httpServer
+})
+///////////////////////////////////////////////////////////////////////
+//const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', function connection(ws) {
     //console.log('A new client Connected!');
