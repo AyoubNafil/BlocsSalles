@@ -47,7 +47,7 @@ router.post('/save', async(req, res) => {
     })
     try {
         const a1 = await user.save()
-        res.redirect('/uesrs');
+        res.redirect('/users');
 
     } catch (err) {
         res.send('Error Hahahah')
