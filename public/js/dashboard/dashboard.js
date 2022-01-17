@@ -268,7 +268,7 @@ $(document).ready(function () {
     }
 
     // Create WebSocket connection.
-    const socket = new WebSocket('ws://localhost:8080');
+    const socket = new WebSocket('ws://blc-sal.herokuapp.com:8080');
     // Listen for messages
     socket.addEventListener('message', function (event) {
         console.log('tfo');
