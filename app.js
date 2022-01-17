@@ -15,17 +15,18 @@ con.on('open', () => {
 app.use(express.json())
 
 ////////////////////////////////////////////////////////////////////
-const http = require('http')
-const port = process.env.PORT || 8080
-const httpServer = http.createServer(app)
-httpServer.listen(port)
+// const http = require('http')
+// const port = process.env.PORT || 8080
+// const httpServer = http.createServer(app)
+// httpServer.listen(port)
 
-const WebSocket = require('ws')
-const wss = new WebSocket.Server({
-  'server': httpServer
-})
+// const WebSocket = require('ws')
+// const wss = new WebSocket.Server({
+//   'server': httpServer
+// })
 ///////////////////////////////////////////////////////////////////////
-//const wss = new WebSocket.Server({ port: 8080 });
+const WebSocket = require('ws')
+const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', function connection(ws) {
     //console.log('A new client Connected!');
