@@ -113,10 +113,15 @@ $(document).ready(function () {
 
     var chart
     var chart1
+    var chart2
+
     var array1 = []
     var array2 = []
     var array3 = []
     var array4 = []
+    var array5 = []
+    var array6 = []
+
 
     $.ajax({
         url: "/dashboard/chart",
@@ -137,9 +142,18 @@ $(document).ready(function () {
                 array3.push(date)
                 array4.push(nbrOccupation)
             })
+
+            const hahaha = data[0].array3.map((statistique) => {
+                const { salle, nbr } = statistique
+                array5.push(salle)
+                array6.push(nbr)
+                console.log(array6)
+            })
             
             barChart(document.getElementById("occupationsDates").getContext("2d"), array3, array4);
             barChart1(document.getElementById("sallesBlocs").getContext("2d"), array1, array2);
+            barChart2(document.getElementById("occupationSemaine").getContext("2d"), array5, array6);
+
 
         },
         error: function (error) {
@@ -227,6 +241,32 @@ $(document).ready(function () {
         });
     }
 
+
+    function barChart2(context, array1, array2) {
+
+        chart2 = new Chart(context, {
+            type: "doughnut",
+            data: {
+                labels: array1,
+                datasets: [
+                    {
+                        data: array2,
+                        backgroundColor: colorArray1
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Occupation par Semaine",
+                        position : "bottom"
+                    }
+                },
+            }
+        });
+    }
+
     // Create WebSocket connection.
     const socket = new WebSocket('ws://localhost:8080');
     // Listen for messages
@@ -247,8 +287,16 @@ $(document).ready(function () {
                     array3.push(date)
                     array4.push(nbrOccupation)
                 })
+                const hahaha = data[0].array3.map((statistique) => {
+                    const { salle, nbr } = statistique
+                    array5.push(salle)
+                    array6.push(nbr)
+                    console.log(array6)
+                })
+                chart2.destroy();
                 chart.destroy();
 
+                barChart2(document.getElementById("occupationsDates").getContext("2d"), array5, array6);
                 barChart(document.getElementById("occupationsDates").getContext("2d"), array3, array4);
 
             },

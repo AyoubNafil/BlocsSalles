@@ -75,6 +75,7 @@ router.get('/cren/', async(req, res) => {
             debutCreneau = debut[1] * 1 + debut[0] * 60;
             finCreneau = fin[1] * 1 + fin[0] * 60;
             dateToMinute = currentDate.getHours() * 60 + currentDate.getMinutes() * 1;
+            //console.log(debutCreneau+" "+finCreneau+" "+dateToMinute);
             if (debutCreneau <= dateToMinute && finCreneau >= dateToMinute) {
                 creneau = creneaux[i];
                 msg = "found";

@@ -70,12 +70,17 @@ router.get('/', async(req, res) => {
 router.get('/chart', async(req, res) => {
 
     try {
+        var crDate = new Date();
         var array = []
         var array1 = []
         var array2 = []
+        var array3 = []
+
 
         const salles = await Salle.find()
         const blocs = await Bloc.find()
+        const occupations = await Occupation.find()
+
         var k = 0
         for (var i = 0; i < blocs.length; i++) {
             for (var j = 0; j < salles.length; j++) {
@@ -87,6 +92,28 @@ router.get('/chart', async(req, res) => {
             array1.push({ bloc: blocs[i].name, nbrSalle: k })
             k = 0
         }
+
+
+
+        k = 0
+        for (var i = 0; i < salles.length; i++) {
+            for (var j = 0; j < occupations.length; j++) {
+                var a = occupations[j].date.split("-")
+                console.log(a[1])
+                if (a[2]==crDate.getFullYear() && a[1]==crDate.getMonth()+1 && a[0]>=crDate.getUTCDate()-7){
+                    if (occupations[j].salle + '' == salles[i]._id + '') {
+                        k++
+                    }
+                }
+            }
+            array3.push({ salle: salles[i].name, nbr: k})
+
+            k = 0
+        }
+
+
+
+
 
         Occupation.aggregate(
             [{
@@ -100,16 +127,52 @@ router.get('/chart', async(req, res) => {
                 for (var i = 0; i < results.length; i++) {
                     array2.push({ date: results[i]._id, nbrOccupation: results[i].count })
                 }
-                array.push({ array1: array1, array2: array2 })
-                console.log(array2)
+                array.push({ array1: array1, array2: array2, array3 : array3 })
                 res.status(200).send(array)
             })
+
+
+
+
+
 
     } catch (err) {
         res.send('Error ' + err)
     }
 })
 
+
+router.get('/chart1', async(req, res) => {
+
+    try {
+        var crDate = new Date();
+        var array = []
+        var array1 = []
+        var array2 = []
+
+        const occupations = await Occupation.find()
+        const salles = await Salle.find()
+        var k = 0
+        for (var i = 0; i < salles.length; i++) {
+            for (var j = 0; j < occupations.length; j++) {
+                var a = occupations[j].date.split("-")
+                console.log(a[1])
+                if (a[2]==crDate.getFullYear() && a[1]==crDate.getMonth()+1 && a[0]>=crDate.getUTCDate()-7){
+                    if (occupations[j].salle + '' == salles[i]._id + '') {
+                        k++
+                    }
+                }
+            }
+            array.push({ salle: salles[i].name, nbr: k})
+
+            k = 0
+        }
+        res.send(array)
+
+    } catch (err) {
+        res.send('Error ' + err)
+    }
+})
 
 router.get('/chart/mobile', async(req, res) => {
 

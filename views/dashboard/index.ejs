@@ -117,20 +117,22 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-          </button>
+                        <i class="fa fa-bars"></i>
+                    </button>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Omar Naitelhaj</span>
                                 <img class="img-profile rounded-circle" src="../images/user.png">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
                             </div>
                         </li>
@@ -211,7 +213,8 @@
                             <div class="col-xl-6 col-lg-6">
                                 <div class="card shadow mb-4">
                                     <!-- Card Header - Dropdown -->
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">Salles par Bloc :</h6>
 
                                     </div>
@@ -228,7 +231,8 @@
                             <div class="col-xl-6 col-lg-6">
                                 <div class="card shadow mb-4">
                                     <!-- Card Header - Dropdown -->
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">Occupations par Date :</h6>
                                     </div>
                                     <div class="card-body">
@@ -242,13 +246,16 @@
                             <div class="col-xl-6 col-lg-6">
                                 <div class="card shadow mb-4">
                                     <!-- Card Header - Dropdown -->
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             <select class="form-control m-3" style=" width: 476px;  ">
                                                 <option value='none'> Selectionner un bloc </option>
                                                 <% array1.forEach(function(e){ %>
-                                                <option value="<%= e.id %>"> <%= e.bloc %> </option>
-                                                <% }); %>
+                                                    <option value="<%= e.id %>">
+                                                        <%= e.bloc %>
+                                                    </option>
+                                                    <% }); %>
                                             </select>
                                         </h6>
                                     </div>
@@ -257,71 +264,86 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Pie Chart -->
+                            <div class="col-xl-6 col-lg-6">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Occupations par Semaine :</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-area">
+                                            <canvas id="occupationSemaine"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
+                        <script>
+                            $('select').on('change', function () {
+                                $('#result').empty();
+                                // $.each(new Array(+this.value), function(i) {
+                                //     $('<div />', {
+                                //         text: 'this is div nr : ' + (i + 1)
+                                //     }).appendTo('#result');
+                                // });
+                                $.ajax({
+                                    url: "/occupation/occupe/" + this.value,
+                                    type: "get",
+                                    success: function (data) {
 
+                                        var output = '';
+                                        // for (var i = 1; i <= value; i++) {
+                                        //     output += '<div>Your Text</div>'
+                                        // }
+                                        // $('#test').empty().append(output);
+                                        console.log(data);
+                                        console.log(data.array[0]);
+                                        console.log(data.array.length);
 
-                    </div>
-                    <script>
-                        $('select').on('change', function() {
-                            $('#result').empty();
-                            // $.each(new Array(+this.value), function(i) {
-                            //     $('<div />', {
-                            //         text: 'this is div nr : ' + (i + 1)
-                            //     }).appendTo('#result');
-                            // });
-                            $.ajax({
-                                url: "/occupation/occupe/" + this.value,
-                                type: "get",
-                                success: function(data) {
+                                        for (var i = 0; i < data.array.length; i++) {
+                                            //output += '<div>' + data.array[i].name + '</div>'
+                                            if (data.array[i].occupied == 0) {
+                                                output += '<div class="card bg-success border-dark mb-3" style="max-width: 18rem;"> <div class = "card-body" > <p style="height: 10px;color:#212529;text-align: center;">' + data.array[i].name + '</p></div ></div > '
+                                            } else {
+                                                output += '<div class="card bg-danger border-dark mb-3" style="max-width: 18rem;"> <div class = "card-body" > <p style="height: 10px;color:#212529;text-align: center;">' + data.array[i].name + '</p></div ></div > '
+                                            }
 
-                                    var output = '';
-                                    // for (var i = 1; i <= value; i++) {
-                                    //     output += '<div>Your Text</div>'
-                                    // }
-                                    // $('#test').empty().append(output);
-                                    console.log(data);
-                                    console.log(data.array[0]);
-                                    console.log(data.array.length);
-
-                                    for (var i = 0; i < data.array.length; i++) {
-                                        //output += '<div>' + data.array[i].name + '</div>'
-                                        if (data.array[i].occupied == 0) {
-                                            output += '<div class="card bg-success border-dark mb-3" style="max-width: 18rem;"> <div class = "card-body" > <p style="height: 10px;color:#212529;text-align: center;">' + data.array[i].name + '</p></div ></div > '
-                                        } else {
-                                            output += '<div class="card bg-danger border-dark mb-3" style="max-width: 18rem;"> <div class = "card-body" > <p style="height: 10px;color:#212529;text-align: center;">' + data.array[i].name + '</p></div ></div > '
                                         }
 
+                                        $('#result').empty().append(output);
+
+                                    },
+                                    error: function (error) {
+                                        console.log(error);
                                     }
+                                });
 
-                                    $('#result').empty().append(output);
-
-                                },
-                                error: function(error) {
-                                    console.log(error);
-                                }
                             });
+                        </script>
 
-                        });
-                    </script>
-
-                    <!-- Bootstrap core JavaScript-->
-                    <script src="../js/jquery-3.6.0.js"></script>
-                    <script src="../js/dataTables.bootstrap4.js"></script>
-                    <script src="../js/bootstrap.min.js"></script>
-                    <script src="../js/bootstrap.bundle.js"></script>
-                    <script src="../js/jquery.dataTables.min.js"></script>
-                    <script src="../js/dataTables.bootstrap5.min.js"></script>
+                        <!-- Bootstrap core JavaScript-->
+                        <script src="../js/jquery-3.6.0.js"></script>
+                        <script src="../js/dataTables.bootstrap4.js"></script>
+                        <script src="../js/bootstrap.min.js"></script>
+                        <script src="../js/bootstrap.bundle.js"></script>
+                        <script src="../js/jquery.dataTables.min.js"></script>
+                        <script src="../js/dataTables.bootstrap5.min.js"></script>
 
 
-                    <!-- Core plugin JavaScript-->
-                    <script src="../js/jquery.easing.js"></script>
-                    <script src="../js/dropzone.js"></script>
+                        <!-- Core plugin JavaScript-->
+                        <script src="../js/jquery.easing.js"></script>
+                        <script src="../js/dropzone.js"></script>
 
-                    <!-- Custom scripts for all pages-->
-                    <script src="../js/sb-admin-2.js"></script>
-                    <script src="../js/all.js"></script>
+                        <!-- Custom scripts for all pages-->
+                        <script src="../js/sb-admin-2.js"></script>
+                        <script src="../js/all.js"></script>
 
-                    <script src="../js/dashboard/dashboard.js"></script>
+                        <script src="../js/dashboard/dashboard.js"></script>
 
 </body>
 
