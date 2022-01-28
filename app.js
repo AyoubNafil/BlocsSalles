@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
-//const url = "mongodb://omar:omar@cluster0-shard-00-00.sf0zs.mongodb.net:27017,cluster0-shard-00-01.sf0zs.mongodb.net:27017,cluster0-shard-00-02.sf0zs.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-umacmu-shard-0&authSource=admin&retryWrites=true&w=majority"
-const url = "mongodb://Ayoub_test:Ayoub_test@cluster0-shard-00-00.ee3il.mongodb.net:27017,cluster0-shard-00-01.ee3il.mongodb.net:27017,cluster0-shard-00-02.ee3il.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-my093n-shard-0&authSource=admin&retryWrites=true&w=majority"
+const url = "mongodb://omar:omar@cluster0-shard-00-00.sf0zs.mongodb.net:27017,cluster0-shard-00-01.sf0zs.mongodb.net:27017,cluster0-shard-00-02.sf0zs.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-umacmu-shard-0&authSource=admin&retryWrites=true&w=majority"
+//const url = "mongodb://Ayoub_test:Ayoub_test@cluster0-shard-00-00.ee3il.mongodb.net:27017,cluster0-shard-00-01.ee3il.mongodb.net:27017,cluster0-shard-00-02.ee3il.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-my093n-shard-0&authSource=admin&retryWrites=true&w=majority"
 
 const app = express()
 
