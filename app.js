@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const url = "mongodb://omar:omar@cluster0-shard-00-00.sf0zs.mongodb.net:27017,cluster0-shard-00-01.sf0zs.mongodb.net:27017,cluster0-shard-00-02.sf0zs.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-umacmu-shard-0&authSource=admin&retryWrites=true&w=majority"
-
+//const url = "mongodb://omar:omar@cluster0-shard-00-00.sf0zs.mongodb.net:27017,cluster0-shard-00-01.sf0zs.mongodb.net:27017,cluster0-shard-00-02.sf0zs.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-umacmu-shard-0&authSource=admin&retryWrites=true&w=majority"
+const url = "mongodb://Ayoub_test:Ayoub_test@cluster0-shard-00-00.ee3il.mongodb.net:27017,cluster0-shard-00-01.ee3il.mongodb.net:27017,cluster0-shard-00-02.ee3il.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-my093n-shard-0&authSource=admin&retryWrites=true&w=majority"
 
 const app = express()
 
@@ -14,6 +14,18 @@ con.on('open', () => {
 
 app.use(express.json())
 
+
+var WebSocketServer = require("ws").Server
+const WebSocket = require('ws')
+var http = require("http")
+var port = process.env.PORT || 5000
+app.use(express.static(__dirname + "/"))
+var server = http.createServer(app)
+server.listen(port)
+console.log("http server listening on %d", port)
+var wss = new WebSocketServer({server: server})
+console.log("websocket server created")
+
 ////////////////////////////////////////////////////////////////////
 // const http = require('http')
 // const port = process.env.PORT || 8080
@@ -25,8 +37,8 @@ app.use(express.json())
 //   'server': httpServer
 // })
 ///////////////////////////////////////////////////////////////////////
-const WebSocket = require('ws')
-const wss = new WebSocket.Server({ port: 8080 });
+// const WebSocket = require('ws')
+// const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', function connection(ws) {
     //console.log('A new client Connected!');
@@ -71,6 +83,6 @@ app.use(
   );
 
 
-app.listen(process.env.PORT || 3000, function(){
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-  });
+// app.listen(process.env.PORT || 3000, function(){
+//     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+//   });

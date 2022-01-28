@@ -354,10 +354,12 @@
 
 
                 // Create WebSocket connection.
-                const socket = new WebSocket('ws://blc-sal.herokuapp.com:8080');
-
+                //const socket = new WebSocket('ws://blc-sal.herokuapp.com:8080');
+                var host = location.origin.replace(/^http/, 'ws')
+                var ws = new WebSocket(host);
+                console.log("ws index: "+host)
                 // Listen for messages
-                socket.addEventListener('message', function(event) {
+                ws.addEventListener('message', function(event) {
                     table.ajax.reload();
                     console.log('suuuuuuuuuuuuuuuuui');
                 });

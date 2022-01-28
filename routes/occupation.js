@@ -3,6 +3,8 @@ const router = express()
 const Salle = require('../models/salle')
 const Bloc = require('../models/bloc')
 const Occupation = require('../models/occupation')
+const User = require('../models/user')
+
 const Creneau = require('../models/creneau')
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -164,14 +166,22 @@ router.post('/', async(req, res) => {
 
                     }).then(function(occupation) {
                         // Create WebSocket connection.
-                        const socket = new WebSocket('ws://blc-sal.herokuapp.com:8080');
+                        //const socket = new WebSocket('ws://blc-sal.herokuapp.com:8080');
+                        //var host = location.origin.replace(/^http/, 'ws')
+                        
+                        var hostt = "wss://"+req.headers.host;
+                        console.log("ws occup: "+hostt);
+                        var ws = new WebSocket(hostt);
 
                         // Connection opened
-                        socket.addEventListener('open', function(event) {
-                            socket.send(JSON.stringify(occupation))
+                        ws.addEventListener('open', function(event) {
+                            ws.send(JSON.stringify(occupation))
                         });
 
                     });
+                    //res.status(200).end();
+
+
 
                 } else {
                     res.json({
@@ -185,6 +195,59 @@ router.post('/', async(req, res) => {
     } else { res.send({ msg: 'salle deja occupe' }) }
 })
 
+router.post('/api2/', async(req, res) => {
+
+    var currentDate = new Date(); //use your date here
+
+    var datee = currentDate.toLocaleDateString('fr-FR');
+    var newdate = datee.split("/").join("-");
+
+
+    const creneauu = await Creneau.find({ "_id": req.body.creneau })
+    const sallee = await Salle.find({ "_id": req.body.salle })
+    const userr = await User.find({ "_id": req.body.user })
+
+    const occupationn = await Occupation.find({ "creneau": creneauu, "salle": sallee, "date": newdate, "user": userr, })
+
+    if (occupationn.length == 0) {
+    
+        Salle.findById(req.body.salle).then(function(salle) {
+            Creneau.findById(req.body.creneau).then(function(creneau) {
+
+                if (salle != null && creneau != null) {
+
+
+
+                    Occupation.create({
+                        "salle": req.body.salle,
+                        "creneau": req.body.creneau,
+                        "date": newdate,
+                        "user": req.body.user
+
+                    }).then(function(occupation) {
+                        // // Create WebSocket connection.
+                        // const socket = new WebSocket('ws://blc-sal.herokuapp.com:8080');
+                        console.log(occupation)
+                        // // Connection opened
+                        // socket.addEventListener('open', function(event) {
+                        //     socket.send(JSON.stringify(occupation))
+                        // });
+
+                    });
+
+
+                } else {
+                    res.json({
+                        "erreur": "salle n'est pas disponible"
+                    })
+                }
+            })
+
+        })
+    
+
+    } else { res.send({ msg: 'salle deja occupe' }) }
+})
 
 router.post('/update/:id', async(req, res) => {
     const occupation = await Occupation.findById(req.params.id)
